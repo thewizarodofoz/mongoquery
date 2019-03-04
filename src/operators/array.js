@@ -4,14 +4,15 @@ function $size(expected, actual) {
 
 function $all(expected, actual) {
     if (!Array.isArray(expected)) {
-        throw new TypeError('$all expects an array as a value');
+        throw new TypeError('$all expects an array as an expected value');
     }
 
     if (!Array.isArray(actual)) {
-        throw new TypeError('$all is only applicable to array fields');
+        throw new TypeError('$all expects an array as an actual value');
     }
 
     for (let item of expected) {
+        // TODO: for large arrays this is will be a performance issue
         if (actual.indexOf(item) === -1) {
             return false;
         }

@@ -1,5 +1,5 @@
 const OPERATORS = require('./operators');
-const { isObject } = require('./utils');
+const {isObject} = require('./utils');
 
 function getOperator(key, throwOnNotFound = true) {
     const operator = OPERATORS[key];
@@ -11,31 +11,27 @@ function getOperator(key, throwOnNotFound = true) {
     return operator;
 }
 
-function isMatch(query, item) {
-    const filterKeys = Object.keys(query);
+function isOperator(thing) {
+    return thing[0] === '$';
+}
 
-    for (let filterKey of filterKeys) {
-        // check for top level logical operators
-        const operatorFn = getOperator(filterKey, false);
-        if (operatorFn) {
-            return operatorFn(query[filterKey], item, isMatch);
-        }
+function isMatch(expected, actual) {
+    // handle implicit $eq
+    if (!isObject(expected)) {
+        expected = {$eq: expected};
+    }
 
-        // check for operator values which are not objects - they are implicit $eq
-        if (!isObject(query[filterKey])) {
-            query[filterKey] = {$eq: query[filterKey]};
-        }
+    const expectedKeys = Object.keys(expected);
 
-        const operatorKeys = Object.keys(query[filterKey]);
+    for (let key of expectedKeys) {
 
-        for (let operatorKey of operatorKeys) {
-            const operatorFn = getOperator(operatorKey);
-            const expectedValue = query[filterKey][operatorKey];
-            const actualValue = item[filterKey];
-
-            const operatorResult = operatorFn(expectedValue, actualValue, isMatch);
-
-            if (!operatorResult) {
+        if (isOperator(key)) {
+            const operator = getOperator(key);
+            if (!operator(expected[key], actual, isMatch)) {
+                return false;
+            }
+        } else {
+            if (!isMatch(expected[key], actual[key])) {
                 return false;
             }
         }
@@ -44,7 +40,7 @@ function isMatch(query, item) {
     return true;
 }
 
-function qson(query = {}, collection = []) {
+function qson(query, collection) {
     const results = [];
 
     for (let item of collection) {

@@ -40,7 +40,7 @@ function isMatch(expected, actual) {
     return true;
 }
 
-function qson(query, collection) {
+function index(query, collection) {
     const results = [];
 
     for (let item of collection) {
@@ -54,4 +54,4 @@ function qson(query, collection) {
     return results;
 }
 
-module.exports = qson;
+module.exports = index;

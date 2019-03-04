@@ -1,4 +1,4 @@
-const qson = require('../src/qson');
+const mongoquery = require('../src');
 
 const mockCollection = [
     {a: 1},
@@ -8,16 +8,16 @@ const mockCollection = [
 ];
 
 test('$and', () => {
-    const results = qson({$and: [{a: {$gt: 1}}, {a: {$lt: 4}}]}, mockCollection);
+    const results = mongoquery({$and: [{a: {$gt: 1}}, {a: {$lt: 4}}]}, mockCollection);
     expect(results).toEqual([{a: 2}]);
 });
 
 test('$or', () => {
-    const results = qson({$or: [{a: {$gt: 3}}, {b: {$eq: 1}}]}, mockCollection);
+    const results = mongoquery({$or: [{a: {$gt: 3}}, {b: {$eq: 1}}]}, mockCollection);
     expect(results).toEqual([{a: 4}, {b: 1}]);
 });
 
 test('$nor', () => {
-    const results = qson({$nor: [{a: {$eq: 1}}, {b: {$eq: 1}}]}, mockCollection);
+    const results = mongoquery({$nor: [{a: {$eq: 1}}, {b: {$eq: 1}}]}, mockCollection);
     expect(results).toEqual([{a: 2}, {a: 4}]);
 });

@@ -1,10 +1,10 @@
-const qson = require('../src/qson');
+const mongoquery = require('../src');
 
 const mockCollection = [
     {a: 1}
 ];
 
 test('unknown operator', () => {
-    const throwing = () => qson({a: {$wow: 4}}, mockCollection);
+    const throwing = () => mongoquery({a: {$wow: 4}}, mockCollection);
     expect(throwing).toThrow('no such operator');
 });

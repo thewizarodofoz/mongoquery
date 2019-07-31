@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "test": "ava test/comparison.js"
+    "test": "jest test"
   },
   "keywords": [],
   "author": {
@@ -13,14 +13,18 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "jest": "24.1.0"
+    "jest": "24.8.0"
   },
   "jest": {
     "testMatch": [
       "**/test/*.js"
     ],
     "collectCoverage": true,
-    "coverageReporters": ["text"],
-    "collectCoverageFrom": ["src/**/*.js"]
+    "coverageReporters": [
+      "text"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ]
   }
 }
